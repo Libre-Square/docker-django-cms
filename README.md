@@ -53,7 +53,7 @@ Visit the administration page of DjangoCMS
 E.g. http://hostname:port/admin  
 
 Default administrator login:  
-  Username: admin  
-  Password: admin  
+* Username: admin  
+* Password: admin  
 
 YOu should change the default password via the administration interface.  
