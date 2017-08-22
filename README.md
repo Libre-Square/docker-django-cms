@@ -8,28 +8,28 @@ The following is a suggestion of how to use this image
 > docker network create -d bridge *bridge network name*
 
 ## Step 2: Deploy a PostgreSQL container in the private network
-> export POSTGRES_DB=djangocms
-> export POSTGRES_USER=djangocms
-> export POSTGRES_PASSWORD=djangocms
+> export POSTGRES_DB=*database name*
+> export POSTGRES_USER=*database user name*
+> export POSTGRES_PASSWORD=*database user password*
 
 > docker run -d \
 >   --name *PostgreSQL container name* \
 >   --network=*bridge network name* \
->   -e *database name* \
->   -e *database user name* \
->   -e *database user password* \
+>   -e POSTGRES_DB \
+>   -e POSTGRES_USER \
+>   -e POSTGRES_PASSWORD \
 >   postgres
 
 ## Step 3: Deploy the DjangoCMS container in the private network
-> export LANGUAGE_CODE=en
-> export TIME_ZONE=Asia/Hong_Kong
-> export LANGUAGES="en:English;zh-hant:Traditional Chinese"
+> export LANGUAGE_CODE=*E.g. en*
+> export TIME_ZONE=*E.g. Asia/Hong_Kong*
+> export LANGUAGES="*Language code:Language name;...*"
 > export DATABASE_ENGINE=django.db.backends.postgresql_psycopg2
-> export DATABASE_HOST=djangocmsdb
+> export DATABASE_HOST=*PostgreSQL container name*
 > export DATABASE_PORT=5432
-> export DATABASE_NAME=djangocms
-> export DATABASE_USER=djangocms
-> export DATABASE_PASSWORD=djangocms
+> export DATABASE_NAME=*database name*
+> export DATABASE_USER=*database user name*
+> export DATABASE_PASSWORD=*database user password*
 
 > docker run -d \
 >   --name *DjangoCMS container name* \
