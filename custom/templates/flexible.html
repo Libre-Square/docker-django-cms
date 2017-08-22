@@ -1,0 +1,40 @@
+{% load cms_tags menu_tags sekizai_tags %}
+<!doctype html>
+<html>
+    <head>
+        <title>{% block title %}{% page_attribute "page_title" %}{% endblock title %}</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        {% render_block "css" %}
+    </head>
+    <body>
+        {% cms_toolbar %}
+    
+        {% addtoblock "css" %}
+            {% static_placeholder "html_head" %}
+        {% endaddtoblock %}
+
+        <div class="container">
+            {% static_placeholder 'header' %}
+            <div class="menu-container">
+                <ul class="nav">
+                    {% show_menu 0 100 100 100 %}
+                </ul>
+            </div>
+            {% static_placeholder 'subheader' %}
+            {% static_placeholder 'leftsidebar' %}
+            {% placeholder "content" %}
+            {% static_placeholder 'rightsidebar' %}
+            {% static_placeholder 'footer' %}
+        </div>
+
+        {% addtoblock "js" %}
+            {% static_placeholder "global_js" %}
+        {% endaddtoblock %}
+
+        {% addtoblock "js" %}
+            {% placeholder "js" %}
+        {% endaddtoblock %}
+        
+        {% render_block "js" %}
+    </body>
+</html>
