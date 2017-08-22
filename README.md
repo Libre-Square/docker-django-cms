@@ -5,7 +5,7 @@ A separate **PostgreSQL** container is expected as the database backend.
 The following is a suggestion of how to use this image  
 
 ## Step 1: Create a user defined bridge network
-> docker network create -d bridge *bridge network name*
+> docker network create -d bridge --internal *bridge network name*
 
 ## Step 2: Deploy a PostgreSQL container in the private network
 > export POSTGRES_DB=*database name*  
@@ -43,7 +43,7 @@ The following is a suggestion of how to use this image
 >   -e DATABASE_NAME \  
 >   -e DATABASE_USER \  
 >   -e DATABASE_PASSWORD \  
->   alexchanwk/docker-django-cms  
+>   alexchanwk/docker-django-cms /run.sh  
 
 ## Step 4: Connect the DjangoCMS container to the host bridge network
 > docker ps -a | grep docker-django-cms | awk '{print $1}' | xargs docker network connect bridge  
