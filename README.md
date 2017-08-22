@@ -1,8 +1,8 @@
 # docker-django-cms
 
-This docker image consists of a **DjangoCMS** + **Gunicorn** + **Nginx** stack.
-A separate **PostgreSQL** container is expected as the database backend.
-The following is a suggestion of how to use this image
+This docker image consists of a **DjangoCMS** + **Gunicorn** + **Nginx** stack.  
+A separate **PostgreSQL** container is expected as the database backend.  
+The following is a suggestion of how to use this image  
 
 ## Step 1: Create a user defined bridge network
 > docker network create -d bridge *bridge network name*
@@ -46,14 +46,14 @@ The following is a suggestion of how to use this image
 >   alexchanwk/docker-django-cms  
 
 ## Step 4: Connect the DjangoCMS container to the host bridge network
-> docker ps -a | grep docker-django-cms | awk '{print $1}' | xargs docker network connect bridge
+> docker ps -a | grep docker-django-cms | awk '{print $1}' | xargs docker network connect bridge  
 
 ## Step 5: Access the DjangoCMS
-Visit the administration page of DjangoCMS
-E.g. http://hostname:port/admin
+Visit the administration page of DjangoCMS  
+E.g. http://hostname:port/admin  
 
-The default administrator login:
-  Username: admin
-  Password: admin
+Default administrator login:  
+  Username: admin  
+  Password: admin  
 
-YOu should change the default password via the administration interface.
+YOu should change the default password via the administration interface.  
