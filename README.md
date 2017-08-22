@@ -43,7 +43,7 @@ The following is a suggestion of how to use this image
 >   -e DATABASE_NAME \
 >   -e DATABASE_USER \
 >   -e DATABASE_PASSWORD \
->   alexchanwk/django-cms
+>   alexchanwk/docker-django-cms
 
 ## Step 4: Connect the DjangoCMS container to the host bridge network
 > docker ps -a | grep django-cms | awk '{print $1}' | xargs docker network connect bridge
