@@ -8,42 +8,42 @@ The following is a suggestion of how to use this image
 > docker network create -d bridge *bridge network name*
 
 ## Step 2: Deploy a PostgreSQL container in the private network
-> export POSTGRES_DB=*database name*
-> export POSTGRES_USER=*database user name*
-> export POSTGRES_PASSWORD=*database user password*
+> export POSTGRES_DB=*database name*  
+> export POSTGRES_USER=*database user name*  
+> export POSTGRES_PASSWORD=*database user password*  
 
-> docker run -d \
->   --name *PostgreSQL container name* \
->   --network=*bridge network name* \
->   -e POSTGRES_DB \
->   -e POSTGRES_USER \
->   -e POSTGRES_PASSWORD \
+> docker run -d \  
+>   --name *PostgreSQL container name* \  
+>   --network=*bridge network name* \  
+>   -e POSTGRES_DB \  
+>   -e POSTGRES_USER \  
+>   -e POSTGRES_PASSWORD \  
 >   postgres
 
 ## Step 3: Deploy the DjangoCMS container in the private network
-> export LANGUAGE_CODE=*E.g. en*
-> export TIME_ZONE=*E.g. Asia/Hong_Kong*
-> export LANGUAGES="*Language code:Language name;...*"
-> export DATABASE_ENGINE=django.db.backends.postgresql_psycopg2
-> export DATABASE_HOST=*PostgreSQL container name*
-> export DATABASE_PORT=5432
-> export DATABASE_NAME=*database name*
-> export DATABASE_USER=*database user name*
-> export DATABASE_PASSWORD=*database user password*
+> export LANGUAGE_CODE=*E.g. en*  
+> export TIME_ZONE=*E.g. Asia/Hong_Kong*  
+> export LANGUAGES="*Language code:Language name;...*"  
+> export DATABASE_ENGINE=django.db.backends.postgresql_psycopg2  
+> export DATABASE_HOST=*PostgreSQL container name*  
+> export DATABASE_PORT=5432  
+> export DATABASE_NAME=*database name*  
+> export DATABASE_USER=*database user name*  
+> export DATABASE_PASSWORD=*database user password*  
 
-> docker run -d \
->   --name *DjangoCMS container name* \
->   --network=*bridge network name* \
->   -p *host publish port*:80 \
->   -e LANGUAGE_CODE \
->   -e TIME_ZONE \
->   -e LANGUAGES \
->   -e DATABASE_ENGINE \
->   -e DATABASE_HOST \
->   -e DATABASE_NAME \
->   -e DATABASE_USER \
->   -e DATABASE_PASSWORD \
->   alexchanwk/docker-django-cms
+> docker run -d \  
+>   --name *DjangoCMS container name* \  
+>   --network=*bridge network name* \  
+>   -p *host publish port*:80 \  
+>   -e LANGUAGE_CODE \  
+>   -e TIME_ZONE \  
+>   -e LANGUAGES \  
+>   -e DATABASE_ENGINE \  
+>   -e DATABASE_HOST \  
+>   -e DATABASE_NAME \  
+>   -e DATABASE_USER \  
+>   -e DATABASE_PASSWORD \  
+>   alexchanwk/docker-django-cms  
 
 ## Step 4: Connect the DjangoCMS container to the host bridge network
 > docker ps -a | grep django-cms | awk '{print $1}' | xargs docker network connect bridge
