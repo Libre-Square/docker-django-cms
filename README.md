@@ -56,4 +56,4 @@ Default administrator login:
 * Username: admin  
 * Password: admin  
 
-YOu should change the default password via the administration interface.  
+You should change the default password via the administration interface.  
