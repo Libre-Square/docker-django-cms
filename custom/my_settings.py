@@ -59,10 +59,12 @@ if 'LANGUAGES' in os.environ:
         }]
 
 TEMPLATES[0]['DIRS'] = [os.path.join(CUSTOM_SETTINGS_DIR, 'templates'),]
+CMS_TEMPLATES = ()
 
-CMS_TEMPLATES = (
-    ('flexible.html', 'Flexible'),
-)
+for file in os.listdir(os.path.join(CUSTOM_SETTINGS_DIR, 'templates')):
+    if file.endswith(".html"):
+        template_name = os.path.splitext(file.capitalize())[0]
+        CMS_TEMPLATES += ((file, template_name),)
 
 if 'DATABASE_ENGINE' in os.environ:
     DATABASES['default']['ENGINE'] = os.environ['DATABASE_ENGINE']
@@ -105,6 +107,7 @@ installed_apps_list += [
     'aldryn_common',
     'aldryn_newsblog',
     'aldryn_people',
+    'reversion',
     'aldryn_reversion',
     'aldryn_translation_tools',
     'parler',
