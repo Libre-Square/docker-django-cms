@@ -13,7 +13,7 @@
 
 # Sync database
 if [ ! -f "/home/django/custom/.initialized" ]; then
-  echo "Synchronizing environment..."
+  echo "Initializing environment..."
   echo
 
   export PYTHONPATH=/home/django/custom:/home/django/djangocms
