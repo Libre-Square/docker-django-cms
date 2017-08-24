@@ -10,8 +10,8 @@
         {% cms_toolbar %}
     
         {% addtoblock "css" %}
-            {% static_placeholder "html_head_static" %}
-            {% placeholder "html_head" %}
+            {% static_placeholder "html head static" %}
+            {% placeholder "html head" %}
         {% endaddtoblock %}
 
         <div class="container">
@@ -35,14 +35,14 @@
                 </ul>
             </div>
             
-            {% static_placeholder 'content_static' %}
+            {% static_placeholder 'content static' %}
 
             {% placeholder "content" %}
             
         </div>
 
         {% addtoblock "js" %}
-            {% static_placeholder "js_static" %}
+            {% static_placeholder "js static" %}
             {% placeholder "js" %}
         {% endaddtoblock %}
         
