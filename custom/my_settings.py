@@ -20,6 +20,14 @@
 # DATABASE_USER
 # DATABASE_PASSWORD
 
+## Optional Environment Variables
+# DJANGOCMS_GOOGLEMAP_API_KEY
+# MAPS_BINGMAPS_API_KEY
+# MAPS_GOOGLEMAPS_API_KEY
+# MAPS_HERE_API_KEY = {'app_id': '<str>', 'app_code': '<str>'}
+# MAPS_MAPBOX_API_KEY
+# MAPS_VIAMICHELIN_API_KEY
+
 ## Launch Demo
 # python manage.py runserver --pythonpath /home/django/custom --settings my_settings 0.0.0.0:8000
 
@@ -84,18 +92,10 @@ if 'DATABASE_USER' in os.environ:
 if 'DATABASE_PASSWORD' in os.environ:
     DATABASES['default']['PASSWORD'] = os.environ['DATABASE_PASSWORD']
 
-## aldryn_boilerplates
-installed_apps_list += ['aldryn_boilerplates']
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'aldryn_boilerplates.staticfile_finders.AppDirectoriesFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-TEMPLATES[0]['OPTIONS']['context_processors'] += ['aldryn_boilerplates.context_processors.boilerplate']
-TEMPLATES[0]['OPTIONS']['loaders'].insert(TEMPLATES[0]['OPTIONS']['loaders'].index('django.template.loaders.app_directories.Loader'), 'aldryn_boilerplates.template_loaders.AppDirectoriesLoader')
-
-ALDRYN_BOILERPLATE_NAME = 'bootstrap3'
+## Google Map API Key for djangocms_googlemap
+if 'DJANGOCMS_GOOGLEMAP_API_KEY' in os.environ:
+    DJANGOCMS_GOOGLEMAP_API_KEY = os.environ['DJANGOCMS_GOOGLEMAP_API_KEY']
+    MAPS_GOOGLEMAPS_API_KEY = os.environ['DJANGOCMS_GOOGLEMAP_API_KEY']
 
 ## aldryn-bootstrap3
 installed_apps_list += ['aldryn_bootstrap3']
@@ -134,16 +134,24 @@ installed_apps_list += ['djangocms_timed']
 ## djangocms-light-gallery
 installed_apps_list += ['light_gallery']
 
-## djangocms-page-meta
-installed_apps_list += [
-    'filer',
-    'meta',
-    'easy_thumbnails',
-    'djangocms_page_meta'
-]
-
 ## djangocms-maps
 installed_apps_list += ['djangocms_maps']
+
+##  Map API Keys for djangocms-maps
+if 'MAPS_BINGMAPS_API_KEY' in os.environ:
+    MAPS_BINGMAPS_API_KEY = os.environ['MAPS_BINGMAPS_API_KEY']
+
+if 'MAPS_GOOGLEMAPS_API_KEY' in os.environ:
+    MAPS_GOOGLEMAPS_API_KEY = os.environ['MAPS_GOOGLEMAPS_API_KEY']
+
+if 'MAPS_HERE_API_KEY' in os.environ:
+    MAPS_HERE_API_KEY = os.environ['MAPS_HERE_API_KEY']
+
+if 'MAPS_MAPBOX_API_KEY' in os.environ:
+    MAPS_MAPBOX_API_KEY = os.environ['MAPS_MAPBOX_API_KEY']
+
+if 'MAPS_VIAMICHELIN_API_KEY' in os.environ:
+    MAPS_VIAMICHELIN_API_KEY = os.environ['MAPS_VIAMICHELIN_API_KEY']
 
 THUMBNAIL_PROCESSORS = tuple(thumbnail_precessors_list)
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))

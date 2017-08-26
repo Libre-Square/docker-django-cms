@@ -27,8 +27,8 @@ RUN su django -c "virtualenv /home/django/env && \
                   . /home/django/env/bin/activate && \
                   pip3 install gunicorn setproctitle psycopg2 djangocms-installer aldryn-bootstrap3 && \
                   pip3 install cmsplugin-filer djangocms-column djangocms-googlemap djangocms-link djangocms-snippet djangocms-style djangocms-video && \
-                  pip3 install aldryn-boilerplates aldryn-bootstrap3 aldryn-newsblog django-cms-articles Markdown django-markwhat cmsplugin-markdown && \
-                  pip3 install djangocms-history djangocms-timed djangocms-light-gallery djangocms-page-meta djangocms-maps && \
+                  pip3 install aldryn-bootstrap3 aldryn-newsblog django-cms-articles Markdown django-markwhat cmsplugin-markdown && \
+                  pip3 install djangocms-history djangocms-timed djangocms-light-gallery djangocms-maps && \
                   djangocms -f -p /home/django/djangocms mysite && \
                   deactivate"
 
