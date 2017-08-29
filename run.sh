@@ -30,6 +30,14 @@ if [ ! -f "/home/django/custom/.initialized" ]; then
   echo
 fi
 
+# Start Memcached
+if (( $(ps -ef | grep -v grep | grep memcached | wc -l) <= 0 ))
+then
+  echo "Starting Memcached..."
+  echo
+  service memcached start
+fi
+
 # Start Nginx
 if (( $(ps -ef | grep -v grep | grep nginx | wc -l) <= 0 ))
 then

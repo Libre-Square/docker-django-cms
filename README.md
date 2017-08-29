@@ -35,7 +35,7 @@ The following is an example on how you may use this image.
 > docker run -d \  
 >   --name `DjangoCMS container name` \  
 >   --network=`bridge network name` \  
->   -p `host publish port`:80 \  
+>   -p 127.0.0.1:`host publish port`:80 \  
 >   -e LANGUAGE_CODE \  
 >   -e TIME_ZONE \  
 >   -e LANGUAGES \  
@@ -63,7 +63,7 @@ Default administrator login:
 You should change the default password via the administration interface.  
 
 ## Note:
-* A number of DjangoCMS plugins are installed. Please refer to the Dockerfile for details.
+* A number of DjangoCMS plugins are installed. Please refer to the Dockerfile and my_settings.py for details.
 * All customizations are self contained. The default templates and settings.py file are left untouched.
 * The DjangoCMS is configured to use a customized template. Please refer to template files in the repository for details.
   * The purpose of this is to make it possible to build the web layouts entirely inside the administration interface. That is to define sections in `DIV`, and then use CSS grid layout to arrange the sections.

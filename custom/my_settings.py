@@ -38,6 +38,7 @@ CUSTOM_SETTINGS_DIR = '/home/django/custom'
 
 thumbnail_precessors_list = list(THUMBNAIL_PROCESSORS)
 installed_apps_list = list(INSTALLED_APPS)
+middleware_classes_list = list(MIDDLEWARE_CLASSES)
 
 DEBUG = False
 ALLOWED_HOSTS = ['*']
@@ -153,5 +154,25 @@ if 'MAPS_MAPBOX_API_KEY' in os.environ:
 if 'MAPS_VIAMICHELIN_API_KEY' in os.environ:
     MAPS_VIAMICHELIN_API_KEY = os.environ['MAPS_VIAMICHELIN_API_KEY']
 
+## Memcache
+CACHES = {
+    'default': {
+        'BACKEND':'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION':'127.0.0.1:11211',
+    }
+}
+middleware_classes_list.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
+middleware_classes_list += ['django.middleware.cache.FetchFromCacheMiddleware']
+
 THUMBNAIL_PROCESSORS = tuple(thumbnail_precessors_list)
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))
+MIDDLEWARE_CLASSES = tuple(middleware_classes_list)
+
+
+## Housekeeping
+# export PYTHONPATH=/home/django/custom:/home/django/djangocms
+# python manage.py cms delete-orphaned-plugins
+
+## CMS migration
+# export PYTHONPATH=/home/django/custom:/home/django/djangocms
+# python manage.py cms list plugins | awk -F: '/model/{print $2}' | awk -F. '{print $1}' | xargs python manage.py dumpdata > cms_dumpdata.json
