@@ -175,4 +175,6 @@ MIDDLEWARE_CLASSES = tuple(middleware_classes_list)
 
 ## CMS migration
 # export PYTHONPATH=/home/django/custom:/home/django/djangocms
-# python manage.py cms list plugins | awk -F: '/model/{print $2}' | awk -F. '{print $1}' | xargs python manage.py dumpdata > cms_dumpdata.json
+# su -p django -c ". /home/django/env/bin/activate && python manage.py cms list plugins | awk -F: '/model/{print \$2}' | awk -F. '{print \$1}' | sort | uniq"
+# su -p django -c ". /home/django/env/bin/activate && python manage.py dumpdata --natural-foreign --exclude auth.permission --exclude contenttypes --indent 2 > cms_dumpdata.json"
+# su -p django -c ". /home/django/env/bin/activate && python manage.py loaddata cms_dumpdata.json"
