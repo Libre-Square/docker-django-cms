@@ -11,7 +11,16 @@
 ## DATABASE_USER
 ## DATABASE_PASSWORD
 
-# Sync database
+# Start Redis
+echo "Restarting Redis..."
+echo
+if (( $(ps -ef | grep -v grep | grep redis-server | wc -l) > 0 ))
+then
+  redis-cli shutdown
+fi
+redis-server --bind 127.0.0.1 --daemonize yes
+
+# Migrate
 if [ ! -f "/home/django/custom/.initialized" ]; then
   echo "Initializing environment..."
   echo
@@ -29,15 +38,6 @@ if [ ! -f "/home/django/custom/.initialized" ]; then
   echo "Environment ready!"
   echo
 fi
-
-# Start Redis
-echo "Restarting Redis..."
-echo
-if (( $(ps -ef | grep -v grep | grep redis-server | wc -l) > 0 ))
-then
-  redis-cli shutdown
-fi
-redis-server --bind 127.0.0.1 --daemonize yes
 
 # Start Nginx
 if (( $(ps -ef | grep -v grep | grep nginx | wc -l) <= 0 ))
