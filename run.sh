@@ -30,13 +30,14 @@ if [ ! -f "/home/django/custom/.initialized" ]; then
   echo
 fi
 
-# Start Memcached
-if (( $(ps -ef | grep -v grep | grep memcached | wc -l) <= 0 ))
+# Start Redis
+echo "Restarting Redis..."
+echo
+if (( $(ps -ef | grep -v grep | grep redis-server | wc -l) > 0 ))
 then
-  echo "Starting Memcached..."
-  echo
-  service memcached start
+  redis-cli shutdown
 fi
+redis-server --bind 127.0.0.1 --daemonize yes
 
 # Start Nginx
 if (( $(ps -ef | grep -v grep | grep nginx | wc -l) <= 0 ))

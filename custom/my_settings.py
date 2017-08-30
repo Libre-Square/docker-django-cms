@@ -154,15 +154,40 @@ if 'MAPS_MAPBOX_API_KEY' in os.environ:
 if 'MAPS_VIAMICHELIN_API_KEY' in os.environ:
     MAPS_VIAMICHELIN_API_KEY = os.environ['MAPS_VIAMICHELIN_API_KEY']
 
-## Memcache
+## Redis
 CACHES = {
-    'default': {
-        'BACKEND':'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION':'127.0.0.1:11211',
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
+            "IGNORE_EXCEPTIONS": True,
+        },
     }
 }
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+
 middleware_classes_list.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
 middleware_classes_list += ['django.middleware.cache.FetchFromCacheMiddleware']
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+CMS_CACHE_DURATIONS = {
+    'content': 600,
+    'menus': 3600,
+    'permissions': 3600,
+}
+CMS_CACHE_PREFIX = 'djangocms'
+CMS_PLACEHOLDER_CACHE = True
+CMS_PAGE_CACHE = True
+CMS_PLUGIN_CACHE = True
 
 THUMBNAIL_PROCESSORS = tuple(thumbnail_precessors_list)
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))
