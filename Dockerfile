@@ -25,7 +25,7 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 # Install Python packages
 RUN su django -c "virtualenv /home/django/env && \
                   . /home/django/env/bin/activate && \
-                  pip3 install django-redis gunicorn setproctitle psycopg2 djangocms-installer aldryn-bootstrap3 channels asgi_redis && \
+                  pip3 install gunicorn setproctitle psycopg2 djangocms-installer channels django-redis asgi_redis && \
                   pip3 install cmsplugin-filer djangocms-column djangocms-googlemap djangocms-link djangocms-snippet djangocms-style djangocms-video && \
                   pip3 install aldryn-bootstrap3 aldryn-newsblog django-cms-articles Markdown django-markwhat cmsplugin-markdown && \
                   pip3 install djangocms-history djangocms-timed djangocms-light-gallery djangocms-maps && \
@@ -42,7 +42,8 @@ RUN rm /etc/nginx/sites-available/default && \
     rm /etc/nginx/sites-enabled/default && \
     ln -s /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.conf && \
     chmod +x /home/django/run.sh && \
-    ln -s /home/django/run.sh /run.sh
+    ln -s /home/django/run.sh /run.sh && \
+    chown -R django:django /home/django
 
 EXPOSE 80
 

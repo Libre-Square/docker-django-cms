@@ -1,24 +1,15 @@
-## Prerequisites
-# pip install aldryn-boilerplates aldryn-bootstrap3 aldryn-newsblog django-cms-articles Markdown django-markwhat cmsplugin-markdown djangocms-history djangocms-timed djangocms-light-gallery djangocms-page-meta djangocms-maps
-# python manage.py syncdb
-# python manage.py migrate
-# python manage.py makemigrations
-# python manage.py collectstatic
-
-## Expected files
-# /home/django/custom/my_settings.py
-# /home/django/custom/templates/flexible.html
-
 ## Expected Environment Variables
-# LANGUAGE_CODE      (E.g. "en")
-# TIME_ZONE          (E.g. "Asia/Hong_Kong")
-# LANGUAGES          (E.g. "en:English;zh-hant:Traditional Chinese")
-# DATABASE_ENGINE    (E.g. "django.db.backends.postgresql_psycopg2")
-# DATABASE_HOST      (E.g. "djangocmsdb")
+# LANGUAGE_CODE
+# TIME_ZONE
+# LANGUAGES
+# DATABASE_ENGINE
+# DATABASE_HOST
 # DATABASE_PORT
 # DATABASE_NAME
 # DATABASE_USER
 # DATABASE_PASSWORD
+# REDIS_HOST
+# REDIS_PORT
 
 ## Optional Environment Variables
 # DJANGOCMS_GOOGLEMAP_API_KEY
@@ -27,9 +18,6 @@
 # MAPS_HERE_API_KEY = {'app_id': '<str>', 'app_code': '<str>'}
 # MAPS_MAPBOX_API_KEY
 # MAPS_VIAMICHELIN_API_KEY
-
-## Launch Demo
-# python manage.py runserver --pythonpath /home/django/custom --settings my_settings 0.0.0.0:8000
 
 import os, io, csv
 from mysite.settings import *
@@ -75,6 +63,7 @@ for file in os.listdir(os.path.join(CUSTOM_SETTINGS_DIR, 'templates')):
         template_name = os.path.splitext(file.capitalize())[0]
         CMS_TEMPLATES += ((file, template_name),)
 
+## PostgreSQL
 if 'DATABASE_ENGINE' in os.environ:
     DATABASES['default']['ENGINE'] = os.environ['DATABASE_ENGINE']
     
@@ -92,6 +81,70 @@ if 'DATABASE_USER' in os.environ:
     
 if 'DATABASE_PASSWORD' in os.environ:
     DATABASES['default']['PASSWORD'] = os.environ['DATABASE_PASSWORD']
+
+## Redis Cache
+if 'REDIS_HOST' in os.environ:
+    redis_host = os.environ['REDIS_HOST']
+    redis_port = '6379'
+    if 'REDIS_PORT' in os.environ:
+        redis_port = os.environ['REDIS_PORT']
+    
+    redis_location = 'redis://' + redis_host + ':' + redis_port + '/0'
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": redis_location,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+                'CONNECTION_POOL_CLASS_KWARGS': {
+                    'max_connections': 100,
+                    'timeout': 20,
+                },
+                "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
+                "IGNORE_EXCEPTIONS": True,
+            },
+        }
+    }
+    DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+    DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+    SESSION_CACHE_ALIAS = "default"
+
+    middleware_classes_list.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
+    middleware_classes_list += ['django.middleware.cache.FetchFromCacheMiddleware']
+
+    CACHE_MIDDLEWARE_ALIAS = 'default'
+    CACHE_MIDDLEWARE_SECONDS = 600
+    CACHE_MIDDLEWARE_KEY_PREFIX = ''
+
+    CMS_CACHE_DURATIONS = {
+        'content': 600,
+        'menus': 3600,
+        'permissions': 3600,
+    }
+    CMS_CACHE_PREFIX = 'djangocms'
+    CMS_PLACEHOLDER_CACHE = True
+    CMS_PAGE_CACHE = True
+    CMS_PLUGIN_CACHE = True
+
+## Redis channels
+if 'REDIS_HOST' in os.environ:
+    channel_redis_host = os.environ['REDIS_HOST']
+    channel_redis_port = 6379
+    if 'REDIS_PORT' in os.environ:
+        channel_redis_port = int(os.environ['REDIS_PORT'])
+
+    installed_apps_list += ['channels']
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(channel_redis_host, channel_redis_port)],
+            },
+            "ROUTING": "livecache.routing.channel_routing",
+        },
+    }
 
 ## Google Map API Key for djangocms_googlemap
 if 'DJANGOCMS_GOOGLEMAP_API_KEY' in os.environ:
@@ -138,6 +191,9 @@ installed_apps_list += ['light_gallery']
 ## djangocms-maps
 installed_apps_list += ['djangocms_maps']
 
+## livecache
+installed_apps_list += ['livecache']
+
 ##  Map API Keys for djangocms-maps
 if 'MAPS_BINGMAPS_API_KEY' in os.environ:
     MAPS_BINGMAPS_API_KEY = os.environ['MAPS_BINGMAPS_API_KEY']
@@ -154,52 +210,7 @@ if 'MAPS_MAPBOX_API_KEY' in os.environ:
 if 'MAPS_VIAMICHELIN_API_KEY' in os.environ:
     MAPS_VIAMICHELIN_API_KEY = os.environ['MAPS_VIAMICHELIN_API_KEY']
 
-## Redis
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
-            "IGNORE_EXCEPTIONS": True,
-        },
-    }
-}
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
-
-middleware_classes_list.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
-middleware_classes_list += ['django.middleware.cache.FetchFromCacheMiddleware']
-
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 600
-CACHE_MIDDLEWARE_KEY_PREFIX = ''
-
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = "default"
-
-CMS_CACHE_DURATIONS = {
-    'content': 600,
-    'menus': 3600,
-    'permissions': 3600,
-}
-CMS_CACHE_PREFIX = 'djangocms'
-CMS_PLACEHOLDER_CACHE = True
-CMS_PAGE_CACHE = True
-CMS_PLUGIN_CACHE = True
-
 THUMBNAIL_PROCESSORS = tuple(thumbnail_precessors_list)
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))
 MIDDLEWARE_CLASSES = tuple(middleware_classes_list)
 
-
-## Housekeeping
-# export PYTHONPATH=/home/django/custom:/home/django/djangocms
-# python manage.py cms delete-orphaned-plugins
-
-## CMS migration
-# export PYTHONPATH=/home/django/custom:/home/django/djangocms
-# su -p django -c ". /home/django/env/bin/activate && python manage.py cms list plugins | awk -F: '/model/{print \$2}' | awk -F. '{print \$1}' | sort | uniq"
-# su -p django -c ". /home/django/env/bin/activate && python manage.py dumpdata --natural-foreign --exclude auth.permission --exclude contenttypes --indent 2 > cms_dumpdata.json"
-# su -p django -c ". /home/django/env/bin/activate && python manage.py loaddata cms_dumpdata.json"

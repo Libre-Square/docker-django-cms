@@ -2,11 +2,14 @@
 
 This docker image consists of a **DjangoCMS** + **Gunicorn** + **Nginx** stack.  
 A separate **PostgreSQL** container is expected as the database backend.  
+A separate **Redis** container is expected to serve as cache and channels.  
   
 The following is an example on how you may use this image.  
+  
 
 ## Step 1: Create a user defined bridge network
 > docker network create -d bridge --internal `bridge network name`
+  
 
 ## Step 2: Deploy a PostgreSQL container in the private network
 > export POSTGRES_DB=`database name`  
@@ -19,9 +22,18 @@ The following is an example on how you may use this image.
 >   -e POSTGRES_DB \  
 >   -e POSTGRES_USER \  
 >   -e POSTGRES_PASSWORD \  
->   postgres
+>   postgres  
+  
 
-## Step 3: Deploy the DjangoCMS container in the private network
+## Step 3: Deploy a Redis container in the private network
+> docker run  
+> docker run -d \  
+>   --name `Redis container name` \  
+>   --network=`bridge network name` \  
+>   redis-server --appendonly yes  
+  
+
+## Step 4: Deploy the DjangoCMS container in the private network
 > export LANGUAGE_CODE=`Language code (E.g. en)`  
 > export TIME_ZONE=`Time zone (E.g. Etc/UTC)`  
 > export LANGUAGES=`"<Language code>:<Language name>;..." (E.g. en:English;zh-hant:繁;zh-hans:简)`  
@@ -31,6 +43,8 @@ The following is an example on how you may use this image.
 > export DATABASE_NAME=`database name`  
 > export DATABASE_USER=`database user name`  
 > export DATABASE_PASSWORD=`database user password`  
+> export REDIS_HOST=`Redis container name`  
+> export REDIS_PORT=6379  
 
 > docker run -d \  
 >   --name `DjangoCMS container name` \  
@@ -44,26 +58,57 @@ The following is an example on how you may use this image.
 >   -e DATABASE_NAME \  
 >   -e DATABASE_USER \  
 >   -e DATABASE_PASSWORD \  
+>   -e REDIS_HOST \  
+>   -e REDIS_PORT \  
 >   alexchanwk/docker-django-cms /run.sh  
+  
 
-## Step 4: Connect the DjangoCMS container to the host bridge network
+## Step 5: Connect the DjangoCMS container to the host bridge network
 > docker ps -a | grep docker-django-cms | awk '{print $1}' | xargs docker network connect bridge  
+  
 
-## Step 5: Access the DjangoCMS
+## Step 6: Access the DjangoCMS
 Wait for DjangoCMS to prepare its database if you are starting the container for the first time. It may take about 10 minutes.  
 You may attach to the container to check its status.  
-
+  
 When the server is started successfully, visit the administration page of DjangoCMS  
 E.g. http://hostname:port/admin  
-
+  
 Default administrator login:  
 * Username: admin  
 * Password: admin  
-
-You should change the default password via the administration interface.  
-
-## Note:
+  
+**You should change the default password via the administration interface.**  
+  
+## Notes:
 * A number of DjangoCMS plugins are installed. Please refer to the Dockerfile and my_settings.py for details.
-* All customizations are self contained. The default templates and settings.py file are left untouched.
-* The DjangoCMS is configured to use a customized template. Please refer to template files in the repository for details.
-  * The purpose of this is to make it possible to build the web layouts entirely inside the administration interface. That is to define sections in `DIV`, and then use CSS grid layout to arrange the sections.
+* All customizations are self contained in the `custom` directory (`/home/django/custom`). The default templates and settings.py file are left untouched.
+* The DjangoCMS is configured to use a customized template. Please refer to template file (`custom/templates/page.html`) for details.
+  * This is to make it possible to build the web layouts entirely inside the administration interface (i.e. define sections in `DIV`, and use CSS flex/grid layout to arrange the sections).
+  
+
+## References:
+* Command examples
+  * Attach to container as `root`
+  * **cd into `custom` directory**
+
+  1. Clean up orphaned plugins
+> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+> su -p django -c ". /home/django/env/bin/activate && python manage.py cms delete-orphaned-plugins"  
+
+  1. List plugins in use
+> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+> su -p django -c ". /home/django/env/bin/activate && python manage.py cms list plugins | awk -F: '/model/{print \$2}' | awk -F. '{print \$1}' | sort | uniq"  
+
+  1. CMS Data export
+    1. Copy `media` directory
+    1. Export data as JSON file
+> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+> su -p django -c ". /home/django/env/bin/activate && python manage.py dumpdata --natural-foreign --exclude auth.permission --exclude contenttypes --indent 2 > cms_dumpdata.json"  
+
+  1. CMS Data import
+    1. Replace `media` directory
+    1. Import data from JSON file
+> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+> su -p django -c ". /home/django/env/bin/activate && python manage.py loaddata cms_dumpdata.json"  
+
