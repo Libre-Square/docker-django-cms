@@ -10,6 +10,7 @@ if [ ! -f "/home/django/custom/.initialized" ]; then
     python /home/django/custom/manage.py makemigrations        --noinput  && \
     python /home/django/custom/manage.py migrate               --noinput  && \
     python /home/django/custom/manage.py collectstatic --clear --noinput  && \
+    echo \"from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')\" | python /home/django/custom/manage.py shell && \
     deactivate && \
     touch /home/django/custom/.initialized"
   

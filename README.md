@@ -63,7 +63,7 @@ The following is an example on how you may use this image.
 >   -e CACHE_REDIS_HOST \  
 >   -e CACHE_REDIS_PORT \  
 >   -e DJANGOCMS_GOOGLEMAP_API_KEY \  
->   alexchanwk/docker-django-cms /run.sh  
+>   libresquare/docker-django-cms /run.sh  
   
 
 ## Step 5: Connect the DjangoCMS container to the host bridge network
