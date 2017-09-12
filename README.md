@@ -26,7 +26,6 @@ The following is an example on how you may use this image.
   
 
 ## Step 3: Deploy a Redis container in the private network
-> docker run  
 > docker run -d \  
 >   --name `Redis container name` \  
 >   --network=`bridge network name` \  
