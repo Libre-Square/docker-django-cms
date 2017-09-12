@@ -30,6 +30,7 @@ The following is an example on how you may use this image.
 > docker run -d \  
 >   --name `Redis container name` \  
 >   --network=`bridge network name` \  
+>   redis \  
 >   redis-server --appendonly yes  
   
 
