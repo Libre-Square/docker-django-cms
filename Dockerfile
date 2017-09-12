@@ -14,12 +14,13 @@ RUN useradd -m -d /home/django django && \
 
 # Install Python and Nginx
 RUN apt-get update && \
-    apt-get -y install locales python3 python3-pip systemd nginx && \
+    apt-get -no-install-recommends -y install locales python3 python3-pip systemd nginx && \
+    rm -rf /var/lib/apt/lists/* && \
+    locale-gen en_US.UTF-8 && \
     pip3 install --upgrade pip && \
     pip3 install virtualenv
 
 # UTF-8
-RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Install Python packages
