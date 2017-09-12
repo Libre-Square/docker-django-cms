@@ -2,7 +2,7 @@
 
 This docker image consists of a **DjangoCMS** + **Gunicorn** + **Nginx** stack.  
 A separate **PostgreSQL** container is expected as the database backend.  
-A separate **Redis** container is expected to serve as cache and channels.  
+A separate **Redis** container is expected to serve as cache.  
   
 The following is an example on how you may use this image.  
   
@@ -43,8 +43,9 @@ The following is an example on how you may use this image.
 > export DATABASE_NAME=`database name`  
 > export DATABASE_USER=`database user name`  
 > export DATABASE_PASSWORD=`database user password`  
-> export REDIS_HOST=`Redis container name`  
-> export REDIS_PORT=6379  
+> export CACHE_REDIS_HOST=`Redis container name`  
+> export CACHE_REDIS_PORT=6379  
+> export DJANGOCMS_GOOGLEMAP_API_KEY=`Google Map API Key`  
 
 > docker run -d \  
 >   --name `DjangoCMS container name` \  
@@ -58,8 +59,9 @@ The following is an example on how you may use this image.
 >   -e DATABASE_NAME \  
 >   -e DATABASE_USER \  
 >   -e DATABASE_PASSWORD \  
->   -e REDIS_HOST \  
->   -e REDIS_PORT \  
+>   -e CACHE_REDIS_HOST \  
+>   -e CACHE_REDIS_PORT \  
+>   -e DJANGOCMS_GOOGLEMAP_API_KEY \  
 >   alexchanwk/docker-django-cms /run.sh  
   
 
@@ -81,7 +83,6 @@ Default administrator login:
 **You should change the default password via the administration interface.**  
   
 ## Notes:
-* A number of DjangoCMS plugins are installed. Please refer to the Dockerfile and my_settings.py for details.
 * All customizations are self contained in the `custom` directory (`/home/django/custom`). The default templates and settings.py file are left untouched.
 * The DjangoCMS is configured to use a customized template. Please refer to template file (`custom/templates/page.html`) for details.
   * This is to make it possible to build the web layouts entirely inside the administration interface (i.e. define sections in `DIV`, and use CSS flex/grid layout to arrange the sections).

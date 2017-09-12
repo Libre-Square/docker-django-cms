@@ -8,23 +8,15 @@
 # DATABASE_NAME
 # DATABASE_USER
 # DATABASE_PASSWORD
-# REDIS_HOST
-# REDIS_PORT
-
-## Optional Environment Variables
+# CACHE_REDIS_HOST
+# CACHE_REDIS_PORT
 # DJANGOCMS_GOOGLEMAP_API_KEY
-# MAPS_BINGMAPS_API_KEY
-# MAPS_GOOGLEMAPS_API_KEY
-# MAPS_HERE_API_KEY = {'app_id': '<str>', 'app_code': '<str>'}
-# MAPS_MAPBOX_API_KEY
-# MAPS_VIAMICHELIN_API_KEY
 
 import os, io, csv
 from mysite.settings import *
 
 CUSTOM_SETTINGS_DIR = '/home/django/custom'
 
-thumbnail_precessors_list = list(THUMBNAIL_PROCESSORS)
 installed_apps_list = list(INSTALLED_APPS)
 middleware_classes_list = list(MIDDLEWARE_CLASSES)
 
@@ -83,17 +75,17 @@ if 'DATABASE_PASSWORD' in os.environ:
     DATABASES['default']['PASSWORD'] = os.environ['DATABASE_PASSWORD']
 
 ## Redis Cache
-if 'REDIS_HOST' in os.environ:
-    redis_host = os.environ['REDIS_HOST']
-    redis_port = '6379'
-    if 'REDIS_PORT' in os.environ:
-        redis_port = os.environ['REDIS_PORT']
+if 'CACHE_REDIS_HOST' in os.environ:
+    cache_redis_host = os.environ['CACHE_REDIS_HOST']
+    cache_redis_port = '6379'
+    if 'CACHE_REDIS_PORT' in os.environ:
+        cache_redis_portredis_port = os.environ['CACHE_REDIS_PORT']
     
-    redis_location = 'redis://' + redis_host + ':' + redis_port + '/0'
+    cache_redis_location = 'redis://' + cache_redis_host + ':' + cache_redis_port + '/0'
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": redis_location,
+            "LOCATION": cache_redis_location,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
@@ -128,89 +120,10 @@ if 'REDIS_HOST' in os.environ:
     CMS_PAGE_CACHE = True
     CMS_PLUGIN_CACHE = True
 
-## Redis channels
-if 'REDIS_HOST' in os.environ:
-    channel_redis_host = os.environ['REDIS_HOST']
-    channel_redis_port = 6379
-    if 'REDIS_PORT' in os.environ:
-        channel_redis_port = int(os.environ['REDIS_PORT'])
-
-    installed_apps_list += ['channels']
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "asgi_redis.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [(channel_redis_host, channel_redis_port)],
-            },
-            "ROUTING": "livecache.routing.channel_routing",
-        },
-    }
-
 ## Google Map API Key for djangocms_googlemap
 if 'DJANGOCMS_GOOGLEMAP_API_KEY' in os.environ:
     DJANGOCMS_GOOGLEMAP_API_KEY = os.environ['DJANGOCMS_GOOGLEMAP_API_KEY']
-    MAPS_GOOGLEMAPS_API_KEY = os.environ['DJANGOCMS_GOOGLEMAP_API_KEY']
 
-## aldryn-bootstrap3
-installed_apps_list += ['aldryn_bootstrap3']
-
-## aldryn-newsblog
-installed_apps_list += [
-    'aldryn_apphooks_config',
-    'aldryn_categories',
-    'aldryn_common',
-    'aldryn_newsblog',
-    'aldryn_people',
-    'reversion',
-    'aldryn_reversion',
-    'aldryn_translation_tools',
-    'parler',
-    'sortedm2m',
-    'taggit'
-]
-
-if 'easy_thumbnails.processors.scale_and_crop' in thumbnail_precessors_list:
-    thumbnail_precessors_list.insert(thumbnail_precessors_list.index('easy_thumbnails.processors.scale_and_crop'), 'filer.thumbnail_processors.scale_and_crop_with_subject_location')
-    thumbnail_precessors_list.remove('easy_thumbnails.processors.scale_and_crop')
-
-## cmsplugin-markdown
-installed_apps_list += [
-    'django_markwhat',
-    'cmsplugin_markdown'
-]
-
-## djangocms-history
-installed_apps_list += ['djangocms_history']
-
-## djangocms-timed
-installed_apps_list += ['djangocms_timed']
-
-## djangocms-light-gallery
-installed_apps_list += ['light_gallery']
-
-## djangocms-maps
-installed_apps_list += ['djangocms_maps']
-
-## livecache
-installed_apps_list += ['livecache']
-
-##  Map API Keys for djangocms-maps
-if 'MAPS_BINGMAPS_API_KEY' in os.environ:
-    MAPS_BINGMAPS_API_KEY = os.environ['MAPS_BINGMAPS_API_KEY']
-
-if 'MAPS_GOOGLEMAPS_API_KEY' in os.environ:
-    MAPS_GOOGLEMAPS_API_KEY = os.environ['MAPS_GOOGLEMAPS_API_KEY']
-
-if 'MAPS_HERE_API_KEY' in os.environ:
-    MAPS_HERE_API_KEY = os.environ['MAPS_HERE_API_KEY']
-
-if 'MAPS_MAPBOX_API_KEY' in os.environ:
-    MAPS_MAPBOX_API_KEY = os.environ['MAPS_MAPBOX_API_KEY']
-
-if 'MAPS_VIAMICHELIN_API_KEY' in os.environ:
-    MAPS_VIAMICHELIN_API_KEY = os.environ['MAPS_VIAMICHELIN_API_KEY']
-
-THUMBNAIL_PROCESSORS = tuple(thumbnail_precessors_list)
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))
 MIDDLEWARE_CLASSES = tuple(middleware_classes_list)
 
