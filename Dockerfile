@@ -14,7 +14,7 @@ RUN useradd -m -d /home/django django && \
 
 # Install Python and Nginx
 RUN apt-get update && \
-    apt-get -no-install-recommends -y install locales python3 python3-pip systemd nginx && \
+    apt-get --no-install-recommends -y install locales python3 python3-pip systemd nginx && \
     rm -rf /var/lib/apt/lists/* && \
     locale-gen en_US.UTF-8 && \
     pip3 install --upgrade pip && \
