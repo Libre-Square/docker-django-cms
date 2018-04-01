@@ -13,7 +13,3 @@ jobs:
       - docker images
       - docker tag docker-django-cms $DOCKER_ORGANIZATION/docker-django-cms
       - docker push $DOCKER_ORGANIZATION/docker-django-cms
-    - stage: test
-      script: 
-      - docker run --rm --name django-cms $DOCKER_ORGANIZATION/docker-django-cms /run.sh
-      - docker ps -a | grep -q django-cms

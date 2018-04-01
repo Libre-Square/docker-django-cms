@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cuhk-library-lits/docker-django-cms.svg?branch=master)](https://travis-ci.org/cuhk-library-lits/docker-django-cms)
+
 # docker-django-cms
 
 This docker image consists of a **DjangoCMS** + **Gunicorn** + **Nginx** stack.  
