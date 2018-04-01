@@ -94,22 +94,22 @@ Default administrator login:
   * **cd into `custom` directory**
 
 1. Clean up orphaned plugins
-> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
-> su -p django -c ". /home/django/env/bin/activate && python manage.py cms delete-orphaned-plugins"  
+  > export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+  > su -p django -c ". /home/django/env/bin/activate && python manage.py cms delete-orphaned-plugins"  
 
 2. List plugins in use
-> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
-> su -p django -c ". /home/django/env/bin/activate && python manage.py cms list plugins | awk -F: '/model/{print \$2}' | awk -F. '{print \$1}' | sort | uniq"  
+  > export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+  > su -p django -c ". /home/django/env/bin/activate && python manage.py cms list plugins | awk -F: '/model/{print \$2}' | awk -F. '{print \$1}' | sort | uniq"  
 
 3. CMS Data export
     1. Copy `media` directory
     2. Export data as JSON file
-> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
-> su -p django -c ". /home/django/env/bin/activate && python manage.py dumpdata --natural-foreign --exclude auth.permission --exclude contenttypes --indent 2 > cms_dumpdata.json"  
+  > export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+  > su -p django -c ". /home/django/env/bin/activate && python manage.py dumpdata --natural-foreign --exclude auth.permission --exclude contenttypes --indent 2 > cms_dumpdata.json"  
 
 4. CMS Data import
     1. Replace `media` directory
     2. Import data from JSON file
-> export PYTHONPATH=/home/django/custom:/home/django/djangocms  
-> su -p django -c ". /home/django/env/bin/activate && python manage.py loaddata cms_dumpdata.json"  
+  > export PYTHONPATH=/home/django/custom:/home/django/djangocms  
+  > su -p django -c ". /home/django/env/bin/activate && python manage.py loaddata cms_dumpdata.json"  
 
