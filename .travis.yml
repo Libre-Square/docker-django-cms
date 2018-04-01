@@ -2,6 +2,8 @@ sudo: required
 
 dist: trusty
 
+language: python
+
 jobs:
   include:
     - stage: build docker image
@@ -12,4 +14,6 @@ jobs:
       - docker tag docker-django-cms $DOCKER_ORGANIZATION/docker-django-cms
       - docker push $DOCKER_ORGANIZATION/docker-django-cms
     - stage: test
-      script: docker run --rm $DOCKER_ORGANIZATION/docker-django-cms /run.sh
+      script: 
+      - docker run --rm --name django-cms $DOCKER_ORGANIZATION/docker-django-cms /run.sh
+      - docker ps -a | grep -q django-cms
