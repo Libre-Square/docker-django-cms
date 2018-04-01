@@ -1,0 +1,15 @@
+sudo: required
+
+dist: trusty
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t docker-django-cms .
+      - docker images
+      - docker tag docker-django-cms $DOCKER_ORGANIZATION/docker-django-cms
+      - docker push $DOCKER_ORGANIZATION/docker-django-cms
+    - stage: test
+      script: docker run --rm $DOCKER_ORGANIZATION/docker-django-cms /run.sh
