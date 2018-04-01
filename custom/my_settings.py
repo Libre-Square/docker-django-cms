@@ -18,7 +18,7 @@ from mysite.settings import *
 CUSTOM_SETTINGS_DIR = '/home/django/custom'
 
 installed_apps_list = list(INSTALLED_APPS)
-middleware_classes_list = list(MIDDLEWARE_CLASSES)
+middleware_classes_list = list(MIDDLEWARE)
 
 DEBUG = False
 ALLOWED_HOSTS = ['*']
@@ -117,5 +117,4 @@ if 'DJANGOCMS_GOOGLEMAP_API_KEY' in os.environ:
     DJANGOCMS_GOOGLEMAP_API_KEY = os.environ['DJANGOCMS_GOOGLEMAP_API_KEY']
 
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))
-MIDDLEWARE_CLASSES = tuple(middleware_classes_list)
-
+MIDDLEWARE = tuple(middleware_classes_list)
