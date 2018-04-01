@@ -40,7 +40,6 @@ installed_apps_list += [
     'djangocms_picture',
     'djangocms_video',
     'djangocms_googlemap',
-    'djangocms_snippet',
     'djangocms_style',
     'djangocms_column',
 ]
