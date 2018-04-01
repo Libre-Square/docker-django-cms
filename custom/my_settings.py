@@ -18,61 +18,10 @@ from mysite.settings import *
 CUSTOM_SETTINGS_DIR = '/home/django/custom'
 
 installed_apps_list = list(INSTALLED_APPS)
-middleware_classes_list = list(MIDDLEWARE)
+middleware_classes_list = list(MIDDLEWARE_CLASSES)
 
 DEBUG = False
 ALLOWED_HOSTS = ['*']
-
-## Install: http://docs.django-cms.org/en/release-3.5.x/how_to/install.html
-installed_apps_list.insert(0, 'djangocms_admin_style')
-installed_apps_list += [
-    'django.contrib.sites',
-    'cms',
-    'menus',
-    'treebeard',
-    'sekizai',
-    'filer',
-    'easy_thumbnails',
-    'mptt',
-    'djangocms_text_ckeditor',
-    'djangocms_link',
-    'djangocms_file',
-    'djangocms_picture',
-    'djangocms_video',
-    'djangocms_googlemap',
-    'djangocms_style',
-    'djangocms_column',
-]
-SITE_ID = 1
-
-TEMPLATES[0]['OPTIONS']['context_processors'] += [
-    'sekizai.context_processors.sekizai',
-    'cms.context_processors.cms_settings'
-]
-
-middleware_classes_list += [
-    'django.middleware.locale.LocaleMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
-    'cms.middleware.utils.ApphookReloadMiddleware'
-]
-
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-THUMBNAIL_HIGH_RESOLUTION = True
-THUMBNAIL_PROCESSORS = (
-    'easy_thumbnails.processors.colorspace',
-    'easy_thumbnails.processors.autocrop',
-    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
-    'easy_thumbnails.processors.filters'
-)
-
-ROOT_URLCONF = 'mysite.my_urls'
-## End Install
 
 if 'LANGUAGE_CODE' in os.environ:    
     LANGUAGE_CODE = os.environ['LANGUAGE_CODE']
@@ -168,5 +117,5 @@ if 'DJANGOCMS_GOOGLEMAP_API_KEY' in os.environ:
     DJANGOCMS_GOOGLEMAP_API_KEY = os.environ['DJANGOCMS_GOOGLEMAP_API_KEY']
 
 INSTALLED_APPS = tuple(list(INSTALLED_APPS) + list(set(installed_apps_list) - set(INSTALLED_APPS)))
-MIDDLEWARE = tuple(middleware_classes_list)
+MIDDLEWARE_CLASSES = tuple(middleware_classes_list)
 
