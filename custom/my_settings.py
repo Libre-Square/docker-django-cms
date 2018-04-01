@@ -31,13 +31,21 @@ if 'TIME_ZONE' in os.environ:
 
 if 'LANGUAGES' in os.environ:
     LANGUAGES = ()
+    CMS_LANGUAGES[1] = []
    
     language_list = list(csv.reader(io.StringIO(os.environ['LANGUAGES']), delimiter=';'))[0]
     for language in language_list:
         language_param = list(csv.reader(io.StringIO(language), delimiter=':'))[0]
         language_code = language_param[0]
         language_name = language_param[1]
-        LANGUAGES += ((language_code, language_name),)
+        LANGUAGES += ((language_code, gettext(language_name)),)
+        CMS_LANGUAGES[1] += [{	
+            'code': language_code,	
+            'name': gettext(language_name),	
+            'public': True,	
+            'redirect_on_fallback': True,	
+            'hide_untranslated': False,	
+        }]
 
 TEMPLATES[0]['DIRS'] = [os.path.join(CUSTOM_SETTINGS_DIR, 'templates'),]
 CMS_TEMPLATES = ()
