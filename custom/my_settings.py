@@ -23,6 +23,58 @@ middleware_classes_list = list(MIDDLEWARE)
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 
+## Install: http://docs.django-cms.org/en/release-3.5.x/how_to/install.html
+installed_apps_list.insert(0, 'djangocms_admin_style')
+installed_apps_list += [
+    'django.contrib.sites',
+    'cms',
+    'menus',
+    'treebeard',
+    'sekizai',
+    'filer',
+    'easy_thumbnails',
+    'mptt',
+    'djangocms_text_ckeditor',
+    'djangocms_link',
+    'djangocms_file',
+    'djangocms_picture',
+    'djangocms_video',
+    'djangocms_googlemap',
+    'djangocms_snippet',
+    'djangocms_style',
+    'djangocms_column',
+]
+SITE_ID = 1
+
+TEMPLATES[0]['OPTIONS']['context_processors'] += [
+    'sekizai.context_processors.sekizai',
+    'cms.context_processors.cms_settings'
+]
+
+middleware_classes_list += [
+    'django.middleware.locale.LocaleMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware',
+    'cms.middleware.utils.ApphookReloadMiddleware'
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+THUMBNAIL_HIGH_RESOLUTION = True
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters'
+)
+
+ROOT_URLCONF = 'mysite.my_urls'
+## End Install
+
 if 'LANGUAGE_CODE' in os.environ:    
     LANGUAGE_CODE = os.environ['LANGUAGE_CODE']
 
@@ -31,21 +83,13 @@ if 'TIME_ZONE' in os.environ:
 
 if 'LANGUAGES' in os.environ:
     LANGUAGES = ()
-    CMS_LANGUAGES[1] = []
-    
+   
     language_list = list(csv.reader(io.StringIO(os.environ['LANGUAGES']), delimiter=';'))[0]
     for language in language_list:
         language_param = list(csv.reader(io.StringIO(language), delimiter=':'))[0]
         language_code = language_param[0]
         language_name = language_param[1]
-        LANGUAGES += ((language_code, gettext(language_name)),)
-        CMS_LANGUAGES[1] += [{
-            'code': language_code,
-            'name': gettext(language_name),
-            'public': True,
-            'redirect_on_fallback': True,
-            'hide_untranslated': False,
-        }]
+        LANGUAGES += ((language_code, language_name),)
 
 TEMPLATES[0]['DIRS'] = [os.path.join(CUSTOM_SETTINGS_DIR, 'templates'),]
 CMS_TEMPLATES = ()

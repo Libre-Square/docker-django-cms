@@ -26,7 +26,9 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 # Install Python packages
 RUN su django -c "virtualenv /home/django/env && \
                   . /home/django/env/bin/activate && \
-                  pip3 install django-cms psycopg2 django-redis && \
+                  pip3 install django-cms psycopg2-binary django-redis && \
+                  pip3 install django-filer  djangocms-text-ckeditor && \
+                  pip3 install djangocms-link djangocms-file djangocms-picture djangocms-video djangocms-googlemap djangocms-snippet djangocms-style djangocms-column && \
                   pip3 install gunicorn setproctitle && \
                   pip3 install channels asgi_redis && \
                   django-admin.py startproject mysite /home/django/djangocms && \
