@@ -18,7 +18,7 @@ from mysite.settings import *
 CUSTOM_SETTINGS_DIR = '/home/django/custom'
 
 installed_apps_list = list(INSTALLED_APPS)
-middleware_classes_list = list(MIDDLEWARE_CLASSES)
+middleware_classes_list = list(MIDDLEWARE)
 
 DEBUG = False
 ALLOWED_HOSTS = ['*']
