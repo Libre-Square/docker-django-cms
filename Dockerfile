@@ -4,6 +4,8 @@
 
 FROM ubuntu
 
+EXPOSE 80
+
 # Create user and folder structure
 RUN useradd -m -d /home/django django && \
     mkdir -p /home/django/djangocms && \
@@ -44,7 +46,5 @@ RUN rm /etc/nginx/sites-available/default && \
     chmod +x /home/django/run.sh && \
     ln -s /home/django/run.sh /run.sh && \
     chown -R django:django /home/django
-
-EXPOSE 80
 
 ENTRYPOINT /run.sh
