@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cuhk-library-lits/docker-django-cms.svg?branch=master)](https://travis-ci.org/cuhk-library-lits/docker-django-cms)
+[![Build Status](https://travis-ci.org/alexchanwk/docker-django-cms.svg?branch=master)](https://travis-ci.org/alexchanwk/docker-django-cms)
 
 # docker-django-cms
 
