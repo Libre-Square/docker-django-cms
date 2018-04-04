@@ -68,7 +68,7 @@ The following is an example on how you may use this image.
   
 
 ## Step 5: Connect the DjangoCMS container to the host bridge network
-> docker ps -a | grep docker-django-cms | awk '{print $1}' | xargs docker network connect bridge  
+> docker ps -a | grep `DjangoCMS container name` | awk '{print $1}' | xargs docker network connect bridge  
   
 
 ## Step 6: Access the DjangoCMS
