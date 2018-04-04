@@ -17,7 +17,7 @@ The following is an example on how you may use this image.
 > export POSTGRES_DB=`database name`  
 > export POSTGRES_USER=`database user name`  
 > export POSTGRES_PASSWORD=`database user password`  
-
+>   
 > docker run -d \  
 >   --name `PostgreSQL container name` \  
 >   --network=`bridge network name` \  
@@ -48,7 +48,7 @@ The following is an example on how you may use this image.
 > export CACHE_REDIS_HOST=`Redis container name`  
 > export CACHE_REDIS_PORT=6379  
 > export DJANGOCMS_GOOGLEMAP_API_KEY=`Google Map API Key`  
-
+>   
 > docker run -d \  
 >   --name `DjangoCMS container name` \  
 >   --network=`bridge network name` \  
